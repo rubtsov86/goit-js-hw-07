@@ -9,11 +9,11 @@ function createGalleryItem({ preview, original, description }) {
 </a></li>`
 }
 
-const newGallery = galleryItems.map(item => createGalleryItem(item));
+const newGallery = galleryItems.map(item => createGalleryItem(item)).join('');
 divContainerRef.insertAdjacentHTML('beforeend', newGallery);
 
 
-var lightbox = new SimpleLightbox('.gallery a');
+const lightbox = new SimpleLightbox('.gallery a');
 lightbox.options.captionsData = 'alt';
 lightbox.options.captionDelay = 250;
 

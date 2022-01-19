@@ -2,6 +2,7 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
 const divContainerRef = document.querySelector('.gallery');
+let createdModal;
 
 function createGalleryItem({ preview, original, description }) {
     return `<div class="gallery__item">
@@ -17,7 +18,9 @@ function createGalleryItem({ preview, original, description }) {
 }
 
 
-const newGallery = galleryItems.map(item => createGalleryItem(item));
+const newGallery = galleryItems.map(item => createGalleryItem(item)).join('');
+
+
 divContainerRef.insertAdjacentHTML('beforeend', newGallery);
 
 divContainerRef.addEventListener('click', onClickImgCreateModal)
@@ -31,34 +34,37 @@ function onClickImgCreateModal(event) {
     }
 
     openModal(event.target.dataset.source);
+
 }
 
 function openModal(objectLargeImg) {
-
-    const createdModal = basicLightbox.create(
-        `<img width="1280" src="${objectLargeImg}">`, {
-        closable: false
+    createdModal = basicLightbox.create(
+        `<img width="1280" src="${objectLargeImg}">`,
+        {
+            onShow: () =>
+                { document.addEventListener("keydown", eventKeydown) },
+            
+            onClose: () =>
+                { document.removeEventListener("keydown", eventKeydown) },
     });
-    createdModal.show();
-   
     
-    if (document.querySelector('.basicLightbox')) {
-    onClickEscapeCloseModal(createdModal);
-    }
-   
+    createdModal.show();
+
+    
 }
 
 
 
-function onClickEscapeCloseModal(modal) {
-    document.addEventListener("keydown", event => {
+function eventKeydown() {
+
+    console.log(event.code);
+        
         if (event.code === 'Escape') {
-            return modal.close();
+            return createdModal.close();
         };
         return
-    });
-    
-}  
+    } 
+
 
 
 
